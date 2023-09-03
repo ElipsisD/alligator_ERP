@@ -1,7 +1,7 @@
 from bot import handlers
 
 COMMAND_HANDLERS = {
-    "start": handlers.start,
+    'start': handlers.start,
 }
 
 HANDLERS = {
@@ -14,4 +14,5 @@ CONVERSATION_HANDLERS = (
 
 CALLBACK_QUERY_HANDLERS = {
     'check': handlers.check,
+    'start_transfer': handlers.transfer,
 }
