@@ -10,5 +10,5 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id=update.effective_chat.id,
         text="Добрый день, сотрудник!\n\n"
              "Чтобы пройти регистрацию, нажми на кнопку ниже!",
-        reply_markup=InlineKeyboardMarkup(start_keyboard),
+        reply_markup=start_keyboard,
     )
