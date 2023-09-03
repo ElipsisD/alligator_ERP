@@ -1,9 +1,9 @@
 import logging
 
 from django.core.management import BaseCommand
-from telegram.ext import ApplicationBuilder, CommandHandler
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, CallbackQueryHandler
 
-from bot.config import COMMAND_HANDLERS
+from bot.config import COMMAND_HANDLERS, HANDLERS, CONVERSATION_HANDLERS, CALLBACK_QUERY_HANDLERS
 from core.settings import TOKEN
 
 
@@ -22,5 +22,14 @@ class Command(BaseCommand):
 
         for command_name, command_handler in COMMAND_HANDLERS.items():
             application.add_handler(CommandHandler(command_name, command_handler))
+
+        for handler in CONVERSATION_HANDLERS:
+            application.add_handler(handler)
+
+        for handler, handler_filter in HANDLERS.items():
+            application.add_handler(MessageHandler(handler_filter, handler))
+
+        for regex, handler in CALLBACK_QUERY_HANDLERS.items():
+            application.add_handler(CallbackQueryHandler(handler, regex))
 
         application.run_polling()
