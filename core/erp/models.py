@@ -1,12 +1,23 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.core import validators
 from django.db import models
 
 from erp.enums import WorkArea
 
 
+class User(AbstractUser):
+    telegram_name = models.CharField(max_length=150)
+
+    class Meta:
+        verbose_name = 'пользователь'
+        verbose_name_plural = 'пользователи'
+
+    def __str__(self):
+        return self.get_full_name()
+
+
 class Transfer(models.Model):
-    author = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='transfers', verbose_name='автор')
+    author = models.ForeignKey(to='erp.User', on_delete=models.DO_NOTHING, related_name='transfers', verbose_name='автор')
     date = models.DateTimeField(auto_now_add=True, verbose_name='дата и время')
     item_number = models.CharField(
         max_length=11, validators=[validators.MinLengthValidator(limit_value=11)], verbose_name='номенклатурный номер'
