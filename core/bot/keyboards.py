@@ -1,5 +1,7 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
+from erp.enums import WorkArea
+
 start_keyboard = InlineKeyboardMarkup([
     [InlineKeyboardButton('Зарегистрироваться', callback_data='register')],
 ])
@@ -17,6 +19,22 @@ status_check_keyboard = InlineKeyboardMarkup([
     [InlineKeyboardButton('Проверить статус', callback_data='check')],
 ])
 
-start_transfer_keyboard = InlineKeyboardMarkup([
-    [InlineKeyboardButton('Создать перемещение', callback_data='start_transfer')],
+start_work_keyboard = InlineKeyboardMarkup([
+    [InlineKeyboardButton('ПЕРЕМЕСТИЛ', callback_data='start_transfer')],
+    [InlineKeyboardButton('ИЗГОТОВИЛ', callback_data='start_production')],
 ])
+
+continue_keyboard = InlineKeyboardMarkup([
+    [InlineKeyboardButton('Далее', callback_data='continue')],
+    [InlineKeyboardButton('Сбросить', callback_data='cancel')],
+])
+
+
+def get_areas_keyboard(prefix: str) -> InlineKeyboardMarkup:
+    keyboard = [
+        [InlineKeyboardButton(label.upper(), callback_data=f'{prefix}_{area}')]
+        for area, label
+        in WorkArea.choices
+    ]
+    keyboard.append([InlineKeyboardButton('Сбросить', callback_data='cancel')])
+    return InlineKeyboardMarkup(keyboard)
