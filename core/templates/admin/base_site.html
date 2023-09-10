@@ -1,0 +1,8 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}{{ site_title|default:_('Django site admin') }} | {{ title }}{% endblock %}
+
+{% block extrahead %}
+    <link rel="shortcut icon" href="{% static 'erp/img/main.ico' %}" />
+{% endblock %}
