@@ -9,10 +9,10 @@ HANDLERS = {
 }
 
 CONVERSATION_HANDLERS = (
+    handlers.transfer_conv_handler,
     handlers.register_conv_handler,
 )
 
 CALLBACK_QUERY_HANDLERS = {
     'check': handlers.check,
-    'start_transfer': handlers.transfer,
 }
