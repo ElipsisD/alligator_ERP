@@ -3,3 +3,4 @@ Django-extensions==3.2.3
 Django-stubs==4.2.3
 python-telegram-bot==20.4
 django-environ==0.11.2
+django-admin-rangefilter==0.11.1
