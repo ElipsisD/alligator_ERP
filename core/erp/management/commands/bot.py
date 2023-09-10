@@ -26,10 +26,10 @@ class Command(BaseCommand):
         for handler in CONVERSATION_HANDLERS:
             application.add_handler(handler)
 
-        for handler, handler_filter in HANDLERS.items():
-            application.add_handler(MessageHandler(handler_filter, handler))
-
         for regex, handler in CALLBACK_QUERY_HANDLERS.items():
             application.add_handler(CallbackQueryHandler(handler, regex))
+
+        for handler, handler_filter in HANDLERS.items():
+            application.add_handler(MessageHandler(handler_filter, handler))
 
         application.run_polling()
