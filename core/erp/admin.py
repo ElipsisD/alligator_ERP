@@ -57,7 +57,6 @@ class MyUserAdmin(UserAdmin):
                         'first_name',
                         'last_name',
                         'patronymic',
-                        'area',
                     )
                 },
             ),
@@ -74,14 +73,21 @@ class MyUserAdmin(UserAdmin):
                 }
             ))
         return (*fieldsets, (
-            'Telegram',
+            'Информация о сотруднике',
             {
                 'fields': (
-                    'chat_id',
-                    'telegram_username',
+                    'area',
                 )
             }
-        ))
+        ),
+                (
+                    'Telegram',
+                    {
+                        'fields': (
+                            'telegram_username',
+                        )
+                    }
+                ))
 
     def get_readonly_fields(self, request, obj=None):
         if obj:
