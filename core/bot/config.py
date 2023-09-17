@@ -10,6 +10,7 @@ HANDLERS = {
 
 CONVERSATION_HANDLERS = (
     handlers.transfer_conv_handler,
+    handlers.production_conv_handler,
     handlers.register_conv_handler,
 )
 
