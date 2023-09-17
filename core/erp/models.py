@@ -15,7 +15,6 @@ class User(AbstractUser):
         verbose_name="username",
         max_length=150,
         unique=True,
-        help_text="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
         validators=[UnicodeUsernameValidator()],
         error_messages={"unique": "A user with that username already exists."},
         null=True,
