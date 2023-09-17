@@ -64,7 +64,7 @@ async def result(update: Update, context: ContextTypes.DEFAULT_TYPE):
         last_name=context.chat_data['last_name'],
         patronymic=context.chat_data['patronymic'],
         chat_id=context.chat_data['message'].chat.id,
-        telegram_username=context.chat_data['message'].chat.username,
+        telegram_username=context.chat_data['message'].chat.username if context.chat_data['message'].chat.username else None,
     )
     await context.chat_data['message'].edit_text(
         text='Готово! Ждите подтверждения.', reply_markup=status_check_keyboard
