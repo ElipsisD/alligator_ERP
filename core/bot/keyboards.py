@@ -30,11 +30,12 @@ continue_keyboard = InlineKeyboardMarkup([
 ])
 
 
-def get_areas_keyboard(prefix: str) -> InlineKeyboardMarkup:
+def get_areas_keyboard(prefix: str, exclude_area: str = None) -> InlineKeyboardMarkup:
     keyboard = [
         [InlineKeyboardButton(label.upper(), callback_data=f'{prefix}_{area}')]
         for area, label
         in WorkArea.choices
+        if area != exclude_area
     ]
     keyboard.append([InlineKeyboardButton('Сбросить', callback_data='cancel')])
     return InlineKeyboardMarkup(keyboard)
