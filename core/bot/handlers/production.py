@@ -1,11 +1,13 @@
+from datetime import datetime
+
 from asgiref.sync import sync_to_async
 from telegram import Update, constants
 from telegram.ext import ContextTypes, ConversationHandler, CallbackQueryHandler, MessageHandler, filters
-from datetime import datetime
+
 from bot.keyboards import cancel_keyboard, continue_keyboard, start_work_keyboard, confirm_keyboard
 from bot.utils import validate_user
 from core.settings import ITEM_NUMBER_DIGIT_COUNT
-from erp.models import User, Production
+from erp.models import Production
 from erp.utils import get_user_by_update
 
 ITEM_NUMBER, AMOUNT, COMMENT, RESULT = range(20, 24)

@@ -1,5 +1,4 @@
-from asgiref.sync import sync_to_async
-from telegram import Update, InlineKeyboardMarkup
+from telegram import Update
 from telegram.error import BadRequest
 from telegram.ext import ContextTypes, ConversationHandler
 

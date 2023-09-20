@@ -1,13 +1,14 @@
 from asgiref.sync import sync_to_async
 from telegram import Update
-from telegram.ext import ContextTypes, ConversationHandler, filters, MessageHandler, CallbackQueryHandler
+from telegram.ext import ContextTypes, ConversationHandler, filters, MessageHandler, CallbackQueryHandler, \
+    CommandHandler
 
-from bot.handlers.start import start_keyboard
+from bot.handlers.start import start_keyboard, start
 from bot.keyboards import cancel_keyboard, confirm_keyboard, status_check_keyboard, start_work_keyboard
 from erp.models import User
 from erp.utils import get_user_by_update
 
-FIRST_NAME, LAST_NAME, PATRONYMIC, RESULT = range(4)
+FIRST_NAME, LAST_NAME, PATRONYMIC, RESULT = range(1, 5)
 
 
 async def register(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -29,7 +30,7 @@ async def register(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await message.edit_text(
             text='Введите фамилию:', reply_markup=cancel_keyboard
         )
-        context.chat_data.update({'message': message})
+        context.chat_data['message'] = message
         return LAST_NAME
 
 
@@ -64,7 +65,8 @@ async def result(update: Update, context: ContextTypes.DEFAULT_TYPE):
         last_name=context.chat_data['last_name'],
         patronymic=context.chat_data['patronymic'],
         chat_id=context.chat_data['message'].chat.id,
-        telegram_username=context.chat_data['message'].chat.username if context.chat_data['message'].chat.username else None,
+        telegram_username=context.chat_data['message'].chat.username if context.chat_data[
+            'message'].chat.username else None,
     )
     await context.chat_data['message'].edit_text(
         text='Готово! Ждите подтверждения.', reply_markup=status_check_keyboard
@@ -89,5 +91,6 @@ register_conv_handler = ConversationHandler(
         PATRONYMIC: [MessageHandler(filters.Regex(r'^\w*$'), patronymic)],
         RESULT: [CallbackQueryHandler(result, 'confirm')],
     },
-    fallbacks=[CallbackQueryHandler(cancel, 'cancel')],
+    fallbacks=[CallbackQueryHandler(cancel, 'cancel'), CommandHandler('start', start)],
+    allow_reentry=True,
 )
