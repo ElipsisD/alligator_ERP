@@ -5,4 +5,24 @@
 
 {% block extrahead %}
     <link rel="shortcut icon" href="{% static 'erp/img/main.ico' %}" />
+    <style>
+      body {
+        background-image: url('{% static 'boat.png' %}');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+      }
+      #content {
+        opacity: 0.9;
+      }
+    </style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <img src="{% static 'logo.png' %}" height="40px" />
+        {{ site_header }}
+    </a>
+</h1>
 {% endblock %}

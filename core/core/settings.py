@@ -2,7 +2,10 @@ import os
 from pathlib import Path
 
 import environ
+from django.contrib import admin
 from import_export.formats.base_formats import XLSX
+
+from core.custom_admin import myadmin
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,6 +19,9 @@ DEBUG = env.bool('DJANGO_DEBUG')
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    'admin_interface',
+    'colorfield',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +46,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'core.urls'
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SILENCED_SYSTEM_CHECKS = ["security.W019"]
 
 TEMPLATES = [
     {
@@ -92,6 +101,8 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+# STATIC_ROOT = os.path.join('static/')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -100,3 +111,9 @@ TOKEN = env.str('TOKEN')
 EXPORT_FORMATS = [XLSX]
 
 ITEM_NUMBER_DIGIT_COUNT = 8
+
+
+ADMIN_SITE = 'core.custom_admin.MyAdminSite'
+
+admin.site = myadmin
+admin.sites.site = myadmin

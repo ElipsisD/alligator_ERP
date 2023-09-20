@@ -1,11 +1,13 @@
 from datetime import datetime
 
+from admin_interface.models import Theme
 from django.contrib import admin
+from django.contrib.auth.models import Group
+
 from django.contrib.auth.admin import UserAdmin
 from django.http import HttpRequest
 from import_export.fields import Field
 from rangefilter.filters import DateRangeQuickSelectListFilterBuilder
-from django.contrib.admin import sites
 from import_export.admin import ExportMixin
 from import_export import resources
 
@@ -13,28 +15,12 @@ from erp.enums import WorkArea
 from erp.models import Transfer, User, Production
 
 
-class MyAdminSite(admin.AdminSite):
-
-    def get_app_list(self, request: HttpRequest, app_label: str | None = ...):
-        apps = [
-            {
-                'name': 'ссылки',
-                'models': [
-                    {'name': 'Telegram', 'perms': {'View': True}, 'admin_url': 'https://t.me/erp_developing_bot'},
-                ]
-            }
-        ]
-        return apps + super().get_app_list(request)
-
-
-myadmin = MyAdminSite()
-admin.site = myadmin
-sites.site = myadmin
-
 admin.site.site_title = 'Alligator ERP'
 admin.site.index_title = 'Административная панель'
-admin.site.site_header = 'Alligator ERP'
+admin.site.site_header = 'ERP'
 admin.site.site_url = None
+admin.site.unregister(Group)
+admin.site.unregister(Theme)
 
 
 @admin.register(User)
@@ -49,6 +35,8 @@ class MyUserAdmin(UserAdmin):
     )
 
     def get_fieldsets(self, request: HttpRequest, obj=...):
+        if not obj:
+            return super().get_fieldsets(request, obj)
         fieldsets = (
             (
                 'Персональная информация',
