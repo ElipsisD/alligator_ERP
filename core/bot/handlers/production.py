@@ -4,7 +4,8 @@ from asgiref.sync import sync_to_async
 from telegram import Update, constants
 from telegram.ext import ContextTypes, ConversationHandler, CallbackQueryHandler, MessageHandler, filters
 
-from bot.keyboards import cancel_keyboard, continue_keyboard, start_work_keyboard, confirm_keyboard
+from bot.keyboards import cancel_keyboard, continue_keyboard, start_work_keyboard, confirm_keyboard, \
+    cancel_with_find_keyboard
 from bot.utils import validate_user
 from core.settings import ITEM_NUMBER_DIGIT_COUNT
 from erp.models import Production
@@ -19,7 +20,10 @@ PATTERN = 'production'
 async def production(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.chat_data['message'] = update.callback_query.message
     await update.callback_query.message.edit_text(
-        text=f'Введите {ITEM_NUMBER_DIGIT_COUNT} цифр номенклатурного номера:', reply_markup=cancel_keyboard
+        text=f'Введите {ITEM_NUMBER_DIGIT_COUNT} цифр номенклатурного номера:\n\n'
+             f'Для включения поиска нажмите на кнопку "ПОИСК\n',
+        reply_markup=cancel_with_find_keyboard,
+        parse_mode=constants.ParseMode.MARKDOWN
     )
     return ITEM_NUMBER
 
@@ -29,7 +33,7 @@ async def item_number(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if len(update.message.text) != ITEM_NUMBER_DIGIT_COUNT:
         await context.chat_data["message"].edit_text(
-            text=f'Нужно ввести {ITEM_NUMBER_DIGIT_COUNT} цифр!', reply_markup=cancel_keyboard
+            text=f'Нужно ввести {ITEM_NUMBER_DIGIT_COUNT} цифр!', reply_markup=cancel_with_find_keyboard
         )
         return ITEM_NUMBER
 

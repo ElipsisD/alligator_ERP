@@ -10,6 +10,11 @@ cancel_keyboard = InlineKeyboardMarkup([
     [InlineKeyboardButton('Сбросить', callback_data='cancel')],
 ])
 
+cancel_with_find_keyboard = InlineKeyboardMarkup([
+    [InlineKeyboardButton('🔎ПОИСК🔎', switch_inline_query_current_chat="")],
+    [InlineKeyboardButton('Сбросить', callback_data='cancel')],
+])
+
 confirm_keyboard = InlineKeyboardMarkup([
     [InlineKeyboardButton('Подтвердить', callback_data='confirm')],
     [InlineKeyboardButton('Сбросить', callback_data='cancel')],
@@ -20,8 +25,8 @@ status_check_keyboard = InlineKeyboardMarkup([
 ])
 
 start_work_keyboard = InlineKeyboardMarkup([
-    [InlineKeyboardButton('ПЕРЕМЕСТИЛ', callback_data='start_transfer')],
-    [InlineKeyboardButton('ИЗГОТОВИЛ', callback_data='start_production')],
+    [InlineKeyboardButton('📦ПЕРЕМЕСТИЛ📦', callback_data='start_transfer')],
+    [InlineKeyboardButton('🔨ИЗГОТОВИЛ🔨', callback_data='start_production')],
 ])
 
 continue_keyboard = InlineKeyboardMarkup([
