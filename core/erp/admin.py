@@ -8,12 +8,11 @@ from django.contrib.auth.admin import UserAdmin
 from django.http import HttpRequest
 from import_export.fields import Field
 from rangefilter.filters import DateRangeQuickSelectListFilterBuilder
-from import_export.admin import ExportMixin
+from import_export.admin import ExportMixin, ImportMixin
 from import_export import resources
 
 from erp.enums import WorkArea
-from erp.models import Transfer, User, Production
-
+from erp.models import Transfer, User, Production, ItemNumber
 
 admin.site.site_title = 'Alligator ERP'
 admin.site.index_title = 'Административная панель'
@@ -199,3 +198,27 @@ class ProductionAdmin(AbstractAdmin):
 
     class Meta:
         model = Production
+
+
+class ItemNumberResource(resources.ModelResource):
+    name = Field(column_name='Наименование', attribute='name')
+    number = Field(column_name='Номер', attribute='number')
+
+    class Meta:
+        model = ItemNumber
+        fields = ('name', 'number')
+        import_id_fields = ('name',)
+        use_bulk = True
+        use_transactions = True
+        skip_unchanged = True
+        report_skipped = True
+
+
+@admin.register(ItemNumber)
+class ItemNumberAdmin(ImportMixin, admin.ModelAdmin):
+    resource_class = ItemNumberResource
+    list_display = ('number', 'name')
+    list_display_links = ('number',)
+
+    class Meta:
+        model = ItemNumber
