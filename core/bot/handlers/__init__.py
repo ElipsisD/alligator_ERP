@@ -5,6 +5,7 @@ from .register import register_conv_handler
 from .check import check
 from .transfer import transfer_conv_handler
 from .production import production_conv_handler
+from .inline import inline_query
 
 __all__ = [
     'start',
@@ -15,4 +16,5 @@ __all__ = [
     'check',
     'transfer_conv_handler',
     'production_conv_handler',
+    'inline_query',
 ]

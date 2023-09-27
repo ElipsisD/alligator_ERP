@@ -17,3 +17,7 @@ CONVERSATION_HANDLERS = (
 CALLBACK_QUERY_HANDLERS = {
     'check': handlers.check,
 }
+
+INLINE_HANDLERS = (
+    handlers.inline_query,
+)
