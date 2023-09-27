@@ -67,3 +67,20 @@ class Production(AbstractModel):
 
     def __str__(self):
         return f'Факт производства №{self.pk}'
+
+
+class ItemNumber(models.Model):
+    name = models.TextField(verbose_name='наименование номенклатуры')
+    number = models.CharField(
+        primary_key=True,
+        max_length=11,
+        validators=[validators.MinLengthValidator(limit_value=11)],
+        verbose_name='номер'
+    )
+
+    class Meta:
+        verbose_name = 'номенклатурный номер'
+        verbose_name_plural = 'номенклатурные номера'
+
+    def __str__(self):
+        return f'Номенклатурный номер {self.pk}'
