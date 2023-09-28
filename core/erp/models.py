@@ -30,8 +30,8 @@ class User(AbstractUser):
 
 class AbstractModel(models.Model):
     date = models.DateTimeField(auto_now_add=True, verbose_name='дата и время')
-    item_number = models.CharField(
-        max_length=11, validators=[validators.MinLengthValidator(limit_value=11)], verbose_name='номенклатурный номер'
+    item_number = models.ForeignKey(
+        to="erp.ItemNumber", verbose_name='номенклатурный номер', on_delete=models.PROTECT
     )
     amount = models.PositiveSmallIntegerField(verbose_name='количество')
     comment = models.TextField(verbose_name='комментарий', blank=True, null=True)
@@ -83,4 +83,4 @@ class ItemNumber(models.Model):
         verbose_name_plural = 'номенклатурные номера'
 
     def __str__(self):
-        return f'Номенклатурный номер {self.pk}'
+        return f'{self.name}'
