@@ -207,7 +207,7 @@ class ItemNumberResource(resources.ModelResource):
     class Meta:
         model = ItemNumber
         fields = ('name', 'number')
-        import_id_fields = ('name',)
+        import_id_fields = ('number',)
         use_bulk = True
         use_transactions = True
         skip_unchanged = True
