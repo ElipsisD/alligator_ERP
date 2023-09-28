@@ -121,6 +121,7 @@ class AbstractAdmin(ExportMixin, admin.ModelAdmin):
         ),
     )
     search_fields = ('item_number',)
+    raw_id_fields = ('item_number',)
 
     def get_export_filename(self, request, queryset, file_format):
         return f'{self.model.__name__} {datetime.now().strftime("%d.%m.%Y %H-%M")}.xlsx'
@@ -219,6 +220,7 @@ class ItemNumberAdmin(ImportMixin, admin.ModelAdmin):
     resource_class = ItemNumberResource
     list_display = ('number', 'name')
     list_display_links = ('number',)
+    search_fields = ('number', 'name')
 
     class Meta:
         model = ItemNumber
