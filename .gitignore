@@ -250,3 +250,4 @@ cython_debug/
 .idea/
 
 /core/static/
+/core/logs/
