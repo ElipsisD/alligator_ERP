@@ -8,7 +8,7 @@ from bot.keyboards import cancel_keyboard, continue_keyboard, start_work_keyboar
     cancel_with_find_keyboard
 from bot.utils import validate_user
 from core.settings import ITEM_NUMBER_DIGIT_COUNT
-from erp.models import Production
+from erp.models import Production, ItemNumber
 from erp.utils import get_user_by_update
 
 ITEM_NUMBER, AMOUNT, COMMENT, RESULT = range(20, 24)
@@ -21,7 +21,7 @@ async def production(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.chat_data['message'] = update.callback_query.message
     await update.callback_query.message.edit_text(
         text=f'Введите {ITEM_NUMBER_DIGIT_COUNT} цифр номенклатурного номера:\n\n'
-             f'Для включения поиска нажмите на кнопку "ПОИСК\n',
+             f'Для включения поиска нажмите на кнопку "ПОИСК"\n',
         reply_markup=cancel_with_find_keyboard,
         parse_mode=constants.ParseMode.MARKDOWN
     )
@@ -59,9 +59,13 @@ async def comment(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.chat_data['comment'] = update.message.text
     except AttributeError:
         context.chat_data['comment'] = ''
+    item_number_object = await sync_to_async(ItemNumber.objects.get)(
+        number=f'НФ-{context.chat_data["item_number"]}',
+    )
+    context.chat_data['item_name'] = item_number_object.name
     await context.chat_data["message"].edit_text(
         text='Все указано верно?\n\n'
-             f'<b>Н-й номер:</b> НФ-{context.chat_data["item_number"]}\n'
+             f'<b>Наименование:</b> {context.chat_data["item_name"]}\n'
              f'<b>Количество:</b> {context.chat_data["amount"]}\n'
              f'<b>Комментарий:</b> {context.chat_data.get("comment", "")}\n',
         parse_mode=constants.ParseMode.HTML,
@@ -74,7 +78,7 @@ async def result(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = await get_user_by_update(update)
     await sync_to_async(Production.objects.create)(
         author=user,
-        item_number=f'НФ-{context.chat_data["item_number"]}',
+        item_number_id=f'НФ-{context.chat_data["item_number"]}',
         amount=int(context.chat_data['amount']),
         comment=context.chat_data['comment'],
         location=user.area,
@@ -82,7 +86,7 @@ async def result(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.chat_data["message"].edit_text(
         text=f'🔨<b>ПРОИЗВЕЛ</b>\n'
              f'📅<b>{datetime.now().strftime("%d.%m.%Y %H:%M")}</b>\n\n'
-             f'<b>Н-й номер:</b> НФ-{context.chat_data["item_number"]}\n'
+             f'<b>Наименование:</b> {context.chat_data["item_name"]}\n'
              f'<b>Количество:</b> {context.chat_data["amount"]}\n'
              + (f'<b>Комментарий:</b> {context.chat_data["comment"]}\n' if context.chat_data["comment"] != '' else ''),
         parse_mode=constants.ParseMode.HTML,
