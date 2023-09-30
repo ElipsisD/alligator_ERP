@@ -1,15 +1,16 @@
 from datetime import datetime
+from urllib.parse import quote
 
 from admin_interface.models import Theme
 from django.contrib import admin
-from django.contrib.auth.models import Group
-
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
 from django.http import HttpRequest
+from django.utils import timezone
+from import_export import resources
+from import_export.admin import ExportMixin, ImportMixin
 from import_export.fields import Field
 from rangefilter.filters import DateRangeQuickSelectListFilterBuilder
-from import_export.admin import ExportMixin, ImportMixin
-from import_export import resources
 
 from erp.enums import WorkArea
 from erp.models import Transfer, User, Production, ItemNumber
@@ -124,7 +125,8 @@ class AbstractAdmin(ExportMixin, admin.ModelAdmin):
     raw_id_fields = ('item_number',)
 
     def get_export_filename(self, request, queryset, file_format):
-        return f'{self.model.__name__} {datetime.now().strftime("%d.%m.%Y %H-%M")}.xlsx'
+        model_name = quote(self.model._meta.verbose_name_plural.capitalize())
+        return f'{model_name} {datetime.now().strftime("%d.%m.%Y %H-%M")}.xlsx'
 
     def export_action(self, request, *args, **kwargs):
         post = request.POST.copy()
@@ -137,7 +139,7 @@ class AbstractAdmin(ExportMixin, admin.ModelAdmin):
 
 
 class AbstractResource(resources.ModelResource):
-    item_number = Field(column_name='Номенклатурный номер', attribute='item_number')
+    item_number = Field(column_name='Номенклатурный номер', attribute='item_number__number')
     amount = Field(column_name='Количество', attribute='amount')
     date = Field(column_name='Дата', attribute='date')
 
@@ -147,7 +149,7 @@ class AbstractResource(resources.ModelResource):
 
     @staticmethod
     def dehydrate_date(obj: Transfer):
-        return obj.date.strftime('%d.%m.%Y %H:%M')
+        return timezone.make_naive(obj.date).strftime('%d.%m.%Y %H:%M')
 
 
 class TransferResource(AbstractResource):
