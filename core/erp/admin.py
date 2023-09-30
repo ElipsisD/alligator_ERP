@@ -2,14 +2,14 @@ from datetime import datetime
 
 from admin_interface.models import Theme
 from django.contrib import admin
-from django.contrib.auth.models import Group
-
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
 from django.http import HttpRequest
+from django.utils import timezone
+from import_export import resources
+from import_export.admin import ExportMixin, ImportMixin
 from import_export.fields import Field
 from rangefilter.filters import DateRangeQuickSelectListFilterBuilder
-from import_export.admin import ExportMixin, ImportMixin
-from import_export import resources
 
 from erp.enums import WorkArea
 from erp.models import Transfer, User, Production, ItemNumber
@@ -147,7 +147,7 @@ class AbstractResource(resources.ModelResource):
 
     @staticmethod
     def dehydrate_date(obj: Transfer):
-        return obj.date.strftime('%d.%m.%Y %H:%M')
+        return timezone.make_naive(obj.date).strftime('%d.%m.%Y %H:%M')
 
 
 class TransferResource(AbstractResource):
