@@ -27,6 +27,12 @@ class User(AbstractUser):
     def __str__(self):
         return self.get_full_name()
 
+    def has_perm(self, perm: str, obj=...) -> bool:
+        return True
+
+    def has_module_perms(self, app_label: str) -> bool:
+        return True
+
 
 class AbstractModel(models.Model):
     date = models.DateTimeField(auto_now_add=True, verbose_name='дата и время')
